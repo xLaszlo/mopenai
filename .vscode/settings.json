@@ -1,0 +1,18 @@
+{
+    "[python]": {
+      "editor.formatOnSave": true,
+      "editor.defaultFormatter": "charliermarsh.ruff",
+      "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit",
+      },
+      "editor.insertSpaces": true,
+      "editor.tabSize": 4,
+    },
+    "files.autoSave": "afterDelay",
+    "files.autoSaveDelay": 100,
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.analysis.extraPaths": [
+      "./tests",
+      "./mopenai"
+    ]
+}
