@@ -16,6 +16,8 @@ How to mock OpenAI's client
 - ruff
 - dotenv
 
+## Usage
+
 Set `OPENAI_API_KEY` in `.env`
 
 Run with
