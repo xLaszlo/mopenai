@@ -2,7 +2,7 @@
 
 How to mock OpenAI's client
 
-## Relevant technologies:
+## Relevant technologies:
 
 - asyncio
 - typer
