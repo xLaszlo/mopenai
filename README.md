@@ -20,6 +20,12 @@ How to mock OpenAI's client
 
 Set `OPENAI_API_KEY` in `.env`
 
+Install `uv` with
+
+```
+curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+
 Run with
 
 ```
