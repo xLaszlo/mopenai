@@ -1,10 +1,14 @@
+from types import SimpleNamespace
 from unittest import IsolatedAsyncioTestCase
 from unittest.mock import patch
 
 import httpx
 import respx
+from openai.types.chat import ChatCompletion
+from openai.types.chat.chat_completion import Choice
+from openai.types.chat.chat_completion_message import ChatCompletionMessage
 
-from mopenai.openai_service import OpenAIService
+from mopenai.openai_service import OpenAIService, OpenAIServiceWithInjection
 
 MOCK_ANSWER = "Test answer"
 
@@ -40,3 +44,70 @@ class TestOpenAI(IsolatedAsyncioTestCase):
             self.assertEqual(mock_get.call_count, 0)
             self.assertEqual(mock_post.call_count, 1)
             self.assertEqual(response, MOCK_ANSWER)
+
+
+from openai.types.chat import ChatCompletion
+from openai.types.chat.chat_completion import Choice
+from openai.types.chat.chat_completion_message import ChatCompletionMessage
+
+
+class FakeAsyncOpenAIClient:
+    def __init__(self):
+        self.call_count = 0
+
+    async def chat_completions_create(self, model, messages):
+        self.call_count += 1
+        return ChatCompletion(
+            id='mock_id',
+            created=0,
+            model='mock_model',
+            object='chat.completion',
+            choices=[
+                Choice(
+                    index=0,
+                    finish_reason='stop',
+                    message=ChatCompletionMessage(
+                        role='assistant',
+                        content=MOCK_ANSWER,
+                    ),
+                ),
+            ],
+        )
+
+
+class TestOpenAIWithInjection(IsolatedAsyncioTestCase):
+    async def test_openai(self):
+        fake_async_openai_client = FakeAsyncOpenAIClient()
+        openai_service = OpenAIServiceWithInjection(async_client=fake_async_openai_client)
+        response = await openai_service.complete("Hello World!")
+        self.assertEqual(fake_async_openai_client.call_count, 1)
+        self.assertEqual(response, MOCK_ANSWER)
+
+
+from types import SimpleNamespace
+
+
+class FakeAsyncOpenAIClientWithSimpleNameSpace:
+    def __init__(self):
+        self.call_count = 0
+
+    async def chat_completions_create(self, model, messages):
+        self.call_count += 1
+        return SimpleNamespace(
+            choices=[
+                SimpleNamespace(
+                    message=SimpleNamespace(
+                        content=MOCK_ANSWER,
+                    )
+                )
+            ]
+        )
+
+
+class TestOpenAIWithInjectionAndSimpleNamespace(IsolatedAsyncioTestCase):
+    async def test_openai(self):
+        fake_async_openai_client = FakeAsyncOpenAIClientWithSimpleNameSpace()
+        openai_service = OpenAIServiceWithInjection(async_client=fake_async_openai_client)
+        response = await openai_service.complete("Hello World!")
+        self.assertEqual(fake_async_openai_client.call_count, 1)
+        self.assertEqual(response, MOCK_ANSWER)
