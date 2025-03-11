@@ -46,11 +46,6 @@ class TestOpenAI(IsolatedAsyncioTestCase):
             self.assertEqual(response, MOCK_ANSWER)
 
 
-from openai.types.chat import ChatCompletion
-from openai.types.chat.chat_completion import Choice
-from openai.types.chat.chat_completion_message import ChatCompletionMessage
-
-
 class FakeAsyncOpenAIClient:
     def __init__(self):
         self.call_count = 0
@@ -82,9 +77,6 @@ class TestOpenAIWithInjection(IsolatedAsyncioTestCase):
         response = await openai_service.complete("Hello World!")
         self.assertEqual(fake_async_openai_client.call_count, 1)
         self.assertEqual(response, MOCK_ANSWER)
-
-
-from types import SimpleNamespace
 
 
 class FakeAsyncOpenAIClientWithSimpleNameSpace:

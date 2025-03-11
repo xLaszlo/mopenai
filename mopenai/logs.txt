@@ -1,0 +1,113 @@
+2025-03-09 22:37:58.070 | INFO     | __main__:main:64 - Processing start
+2025-03-09 22:37:58.070 | INFO     | __main__:schedule:39 - Task scheduled: 0
+2025-03-09 22:37:58.070 | INFO     | __main__:schedule:39 - Task scheduled: 1
+2025-03-09 22:37:58.070 | INFO     | __main__:schedule:39 - Task scheduled: 2
+2025-03-09 22:37:58.070 | INFO     | __main__:schedule:39 - Task scheduled: 3
+2025-03-09 22:37:58.070 | INFO     | __main__:schedule:39 - Task scheduled: 4
+2025-03-09 22:37:58.070 | INFO     | __main__:schedule:39 - Task scheduled: 5
+
+""" All tasks are scheduled """
+
+2025-03-09 22:37:58.070 | INFO     | __main__:main:68 - Scheduling finished
+2025-03-09 22:37:58.070 | INFO     | __main__:is_finished:59 - Finished tasks: []
+2025-03-09 22:37:58.070 | INFO     | __main__:main:70 - Waiting for processing to finish
+
+""" is_finished() immediately ran and we enter into the 1 sec waiting in the while loop """
+
+2025-03-09 22:37:58.071 | INFO     | __main__:run:44 - Task 0 started and waiting for the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:46 - Task 0 past the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:49 - Task 0 start waiting
+2025-03-09 22:37:58.071 | INFO     | __main__:run:44 - Task 1 started and waiting for the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:46 - Task 1 past the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:49 - Task 1 start waiting
+2025-03-09 22:37:58.071 | INFO     | __main__:run:44 - Task 2 started and waiting for the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:46 - Task 2 past the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:49 - Task 2 start waiting
+
+""" First three tasks are immediately go through the semaphore and start their own waiting """
+
+2025-03-09 22:37:58.071 | INFO     | __main__:run:44 - Task 3 started and waiting for the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:44 - Task 4 started and waiting for the semaphore
+2025-03-09 22:37:58.071 | INFO     | __main__:run:44 - Task 5 started and waiting for the semaphore
+
+""" Tasks 3-5 is waiting in front of the semaphore to be free """
+
+2025-03-09 22:37:59.072 | INFO     | __main__:is_finished:59 - Finished tasks: []
+
+""" Still nothing finished, while loop waits for another 1 sec """
+
+2025-03-09 22:37:59.072 | INFO     | __main__:main:70 - Waiting for processing to finish
+2025-03-09 22:37:59.072 | INFO     | __main__:run:51 - Task 2 message:                         *** Learn Async ***
+2025-03-09 22:37:59.072 | INFO     | __main__:run:54 - Task 2 finished, semaphore released
+2025-03-09 22:37:59.072 | INFO     | __main__:run:46 - Task 3 past the semaphore
+2025-03-09 22:37:59.072 | INFO     | __main__:run:49 - Task 3 start waiting
+
+""" Waiting in Task 2 (the shortest), finishes first, releases the semaphore, Task 3 immediately starts """
+
+2025-03-09 22:38:00.073 | INFO     | __main__:is_finished:59 - Finished tasks: [2]
+
+""" Waiting for 1 sec in the while loop in main() finishes, is_finished() run and see Task 2 is finished """
+
+2025-03-09 22:38:00.073 | INFO     | __main__:main:70 - Waiting for processing to finish
+
+""" while loop goes back to sleepiong """
+
+2025-03-09 22:38:01.072 | INFO     | __main__:run:51 - Task 1 message:                         *** Here we go ***
+2025-03-09 22:38:01.072 | INFO     | __main__:run:54 - Task 1 finished, semaphore released
+2025-03-09 22:38:01.072 | INFO     | __main__:run:46 - Task 4 past the semaphore
+2025-03-09 22:38:01.072 | INFO     | __main__:run:49 - Task 4 start waiting
+
+""" Task 1 finishes, Task 4 starts (note that finishing time based on the Tasks length regardless of order) """
+
+2025-03-09 22:38:01.074 | INFO     | __main__:is_finished:59 - Finished tasks: [1, 2]
+2025-03-09 22:38:01.074 | INFO     | __main__:main:70 - Waiting for processing to finish
+
+""" is_finished() recognised Task 1 finished, while loop goes back to sleeping """
+
+2025-03-09 22:38:02.075 | INFO     | __main__:is_finished:59 - Finished tasks: [1, 2]
+2025-03-09 22:38:02.075 | INFO     | __main__:main:70 - Waiting for processing to finish
+
+""" Still no finishes """
+
+2025-03-09 22:38:03.073 | INFO     | __main__:run:51 - Task 0 message:                         *** Hello World ***
+2025-03-09 22:38:03.074 | INFO     | __main__:run:54 - Task 0 finished, semaphore released
+2025-03-09 22:38:03.074 | INFO     | __main__:run:46 - Task 5 past the semaphore
+2025-03-09 22:38:03.074 | INFO     | __main__:run:49 - Task 5 start waiting
+
+""" Finally Task 5 can enter behind the semaphore... """
+
+2025-03-09 22:38:03.076 | INFO     | __main__:is_finished:59 - Finished tasks: [0, 1, 2]
+2025-03-09 22:38:03.076 | INFO     | __main__:main:70 - Waiting for processing to finish
+2025-03-09 22:38:04.073 | INFO     | __main__:run:51 - Task 4 message:                         *** with feeling ***
+2025-03-09 22:38:04.074 | INFO     | __main__:run:54 - Task 4 finished, semaphore released
+2025-03-09 22:38:04.075 | INFO     | __main__:run:51 - Task 5 message:                         *** One more time ***
+2025-03-09 22:38:04.075 | INFO     | __main__:run:54 - Task 5 finished, semaphore released
+2025-03-09 22:38:04.076 | INFO     | __main__:is_finished:59 - Finished tasks: [0, 1, 2, 4, 5]
+2025-03-09 22:38:04.076 | INFO     | __main__:main:70 - Waiting for processing to finish
+2025-03-09 22:38:05.077 | INFO     | __main__:is_finished:59 - Finished tasks: [0, 1, 2, 4, 5]
+2025-03-09 22:38:05.077 | INFO     | __main__:main:70 - Waiting for processing to finish
+2025-03-09 22:38:06.078 | INFO     | __main__:is_finished:59 - Finished tasks: [0, 1, 2, 4, 5]
+
+""" Nothing new happening for a while, we are waiting for Task 3 (the longest) """
+
+2025-03-09 22:38:06.079 | INFO     | __main__:main:70 - Waiting for processing to finish
+2025-03-09 22:38:07.080 | INFO     | __main__:is_finished:59 - Finished tasks: [0, 1, 2, 4, 5]
+2025-03-09 22:38:07.080 | INFO     | __main__:main:70 - Waiting for processing to finish
+2025-03-09 22:38:08.082 | INFO     | __main__:is_finished:59 - Finished tasks: [0, 1, 2, 4, 5]
+2025-03-09 22:38:08.083 | INFO     | __main__:main:70 - Waiting for processing to finish
+2025-03-09 22:38:09.076 | INFO     | __main__:run:51 - Task 3 message:                         *** Subscribe ***
+2025-03-09 22:38:09.076 | INFO     | __main__:run:54 - Task 3 finished, semaphore released
+2025-03-09 22:38:09.086 | INFO     | __main__:is_finished:59 - Finished tasks: [0, 1, 2, 3, 4, 5]
+
+""" Last task finished, is_finished() returned True and while loop exited. No more waiting """
+
+""" Nothing more left, just acquire the lock and print the statuses. """
+
+2025-03-09 22:38:09.086 | INFO     | __main__:main:74 - Task 0 status: Status.FINISHED
+2025-03-09 22:38:09.087 | INFO     | __main__:main:74 - Task 1 status: Status.FINISHED
+2025-03-09 22:38:09.087 | INFO     | __main__:main:74 - Task 2 status: Status.FINISHED
+2025-03-09 22:38:09.087 | INFO     | __main__:main:74 - Task 3 status: Status.FINISHED
+2025-03-09 22:38:09.087 | INFO     | __main__:main:74 - Task 4 status: Status.FINISHED
+2025-03-09 22:38:09.087 | INFO     | __main__:main:74 - Task 5 status: Status.FINISHED
+
+""" And that's all! """
